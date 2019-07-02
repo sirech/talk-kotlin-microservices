@@ -42,15 +42,15 @@ class: middle
 
 # Why switch?
 
-- Immutability
+- Immutability: Be sure of what your data looks like
 
 --
 
-- Null safety
+- Null safety: Less unexpected exceptions
 
 --
 
-- Compactness
+- Compactness: More bang for the buck
 
 ---
 
@@ -87,7 +87,7 @@ fun Country.isDefaultLanguage(language: Language): Boolean {
 
 class: transition
 
-# Extension functions
+# Extension functions as a replacement for helper functions
 
 ---
 
@@ -217,24 +217,7 @@ fun `injects header into the request and passes it to the filter`() {
 
 class: transition
 
-# Null Safety
-
----
-
-```kotlin
-@RestController
-class Controller(
-  @Autowired val gateway: Gateway) {
-
-  @GetMapping(URL)
-  fun fetch(@PathVariable("userId") id: UserId): 
-    ResponseEntity<User> {
-      return gateway.fetch(id)?.run {
-        ResponseEntity.ok(this)
-      } ?: ResponseEntity.notFound()
-  }
-}
-```
+# Null Safety pitfalls
 
 ---
 
