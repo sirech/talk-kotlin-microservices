@@ -1,4 +1,4 @@
-title: What we learnt building a microservice in Kotlin
+title: Kotlin for Microservices, why?
 class: animation-fade
 layout: true
 
@@ -18,51 +18,82 @@ class: impact center middle
  Lead Developer
  
  **Thought**Works
-
+ 
 ---
 
 class: transition
 
-# Context
-
----
-
-class: full-height
-background-image: url(images/scheme.jpg)
-
----
-
-class: center middle 
-
-![springboot](images/springboot.png)
+# Starting point
 
 ---
 
 class: middle
 
-# Why switch?
-
-- Immutability: Be sure of what your data looks like
-
---
-
-- Null safety: Less unexpected exceptions
-
---
-
-- Compactness: More bang for the buck
+> For our new service, we are thinking of using something different than Java
 
 ---
 
-class: impact
+picture of jvm langs
 
-# Let's see some examples
+???
+
+- many options, I don't have practical experience on these languages
+
+---
+
+picture of kotlin selected
 
 ---
 
 class: transition
 
-# Pseudo DSLs
+# What do you get with Kotlin
+
+---
+
+class: center middle 
+
+# Seamless transition
+
+---
+
+![springboot](images/springboot.png)
+
+picture of existing libraries
+
+-> make use of exisitng libraries and frameworks such as springboot, junit, jackson, mockito, assertj, wiremock
+
+---
+
+```Dockerfile
+FROM openjdk:8-jre-alpine3.9
+
+WORKDIR /app
+EXPOSE 4003
+
+ENV ENV='dev'
+
+RUN apk add --update --no-cache dumb-init \
+  && rm -rf /var/cache/apk/*
+
+COPY build/libs/*.jar app.jar
+
+RUN adduser -D runner
+
+USER runner
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+CMD ["java", "-Dspring.profiles.active=${ENV}", "-jar", "app.jar" ]
+```
+
+---
+
+class: center middle 
+
+# Lean
+
+???
+
+- Lean is specially useful in the context of microservices, as we aiming to keep things as small as possible
 
 ---
 
@@ -85,12 +116,6 @@ fun Country.isDefaultLanguage(language: Language): Boolean {
 
 ---
 
-class: transition
-
-# Extension functions as a replacement for helper functions
-
----
-
 ```kotlin
 package my.utils
 
@@ -100,13 +125,9 @@ fun String.asStream(): InputStream {
     return Utils.javaClass.classLoader.getResourceAsStream(this)
 }
 
-fun InputStream.readTextAndClose(charset: Charset = Charsets.UTF_8): String {
-    return this.bufferedReader(charset).use { it.readText() }
-}
-
+fun InputStream.readTextAndClose(charset: Charset = Charsets.UTF_8) = 
+    this.bufferedReader(charset).use { it.readText() }
 ```
-
----
 
 ```kotlin
 import my.utils.asStream
@@ -117,107 +138,29 @@ val jwt = "jwt".asStream().readTextAndClose()
 
 ---
 
-class: transition
+class: center middle
 
-# JSON
-
----
-
-```kotlin
-data class UserId(private val value: String) {
-    companion object {
-        @JvmStatic
-        @JsonCreator
-        fun create(value: String) = UserId(value.toLowerCase())
-    }
-
-    @JsonValue
-    override fun toString() = value
-}
-```
+# Sane defaults
 
 ---
 
-```kotlin
-class User(
-  id: UserId, 
-  name: String
-)
-```
-
-```json
-{
-  "id": "33242123",
-  "name": "The Dude"
-}
-```
+immutability example
 
 ---
 
-class: transition
-
-# Testing
+closed classes & override
 
 ---
 
-.col-12[
-![junit](images/junit5.png)
-]
-.col-6[
-![mockk](images/mockk.png)
-]
-.col-6[
-![atrium](images/attrium.svg)
-]
+class: center middle
+
+# Null safety
 
 ---
 
-# Meaningful test names
+class: center middle
 
-```kotlin
-@Test
-fun `is case insensitive`() {
-}
-```
-
----
-
-# Fluent declarations
-
-```kotlin
-val car = mockk<Car>()
-
-every { car.drive(Direction.NORTH) } returns Outcome.OK
-car.drive(Direction.NORTH) // returns OK
-
-verify { car.drive(Direction.NORTH) }
-```
-
----
-
-# Capturing arguments
-
-```kotlin
-@Test
-fun `injects header into the request and passes it to the filter`() {
-    filter.doFilter(request, response, filterChain)
-
-    slot<ServletRequest>().let { slot ->
-        verify { filterChain.doFilter(capture(slot), response) }
-
-        expect(slot.captured).isA<HttpServletRequestWrapper> {
-            expect(subject.getHeader(Headers.EXTRA_HEADER))
-              .toBe("value")
-        }
-    }
-}
-```
-
----
-
-class: transition
-
-# Null Safety pitfalls
+## Pitfalls
 
 ---
 
@@ -235,21 +178,42 @@ override fun preHandle(
 
 ---
 
+```kotlin
+override fun doFilterInternal(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        filterChain: FilterChain) {
+    request.getHeader(Headers.AUTHORIZATION)?.let { header ->
+        jwt(header)?.let { jwt ->
+            authentication(jwt)?.let { auth ->
+                val context = SecurityContextHolder.getContext()
+                context.authentication = auth
+            }
+        }
+
+    filterChain.doFilter(request, response)
+}
+```
+
+---
+
+class: transition
+
+# Kotlin is a gateway drug
+
+---
+
+new libraries
+
+---
+
+new paradigms
+
+---
+
 class: transition
 
 # Conclusion
-
----
-
-class: center middle
-
-## Quick transition
-
----
-
-class: center middle
-
-## Productivity boost
 
 ---
 
@@ -269,7 +233,5 @@ class: middle
 
 - https://hceris.com/painless-json-with-kotlin-and-jackson/
 - https://hceris.com/mock-verification-in-kotlin/
-
----
 
 ---
