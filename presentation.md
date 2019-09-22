@@ -10,6 +10,11 @@ class: impact
 
 # {{title}}
 
+???
+
+- Some of us at TW are very excited about Kotlin
+- Want to share about our experience, mostly in the context of microservices
+
 ---
 
 class: impact center middle
@@ -31,17 +36,30 @@ class: middle
 
 > For our new service, we are thinking of using something different than Java
 
+???
+
+- That's the beauty of microservices, experiments are possible
+
 ---
 
-picture of jvm langs
+class: center middle
+
+.image-grid[
+.img[![java](images/java.png)]
+.img[![scala](images/scala.png)]
+.img[![clojure](images/clojure.png)]
+.img[![jruby](images/jruby.png)]
+]
 
 ???
 
+- let's say you want to stay in the jvm
 - many options, I don't have practical experience on these languages
 
 ---
 
-picture of kotlin selected
+class: full-width
+background-image: url(images/kotlin.png)
 
 ---
 
@@ -57,11 +75,24 @@ class: center middle
 
 ---
 
+class: center middle
 ![springboot](images/springboot.png)
 
-picture of existing libraries
+???
 
--> make use of exisitng libraries and frameworks such as springboot, junit, jackson, mockito, assertj, wiremock
+- you don't need to change everything at once
+- kotlin makes a big point of remaning compatible with java
+
+---
+
+class: center middle
+
+.image-grid[
+.img[![junit5](images/junit5.png)]
+.img[![wiremock](images/wiremock.png)]
+.img[![mockito](images/mockito.png)]
+.img[![assertj](images/assertj.png)]
+]
 
 ---
 
@@ -84,6 +115,11 @@ USER runner
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 CMD ["java", "-Dspring.profiles.active=${ENV}", "-jar", "app.jar" ]
 ```
+
+???
+
+- Operationally, there is little change.
+- If you are dockerizing your services, the only change is adding the right dependencies to the jar you build
 
 ---
 
@@ -203,11 +239,30 @@ class: transition
 
 ---
 
-new libraries
+class: center middle 
+
+# New libraries
 
 ---
 
-new paradigms
+class: center middle 
+
+.image-grid-1-row[
+.img[![mockk](images/mockk.png)]
+.img[![strikt](images/strikt.png)]
+]
+
+---
+
+class: center middle 
+
+# New paradigms
+
+---
+
+class: center middle 
+
+.img[![arrow](images/arrow.png)]
 
 ---
 

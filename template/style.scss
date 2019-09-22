@@ -262,6 +262,12 @@ blockquote {
   grid-gap: 15px;
 }
 
+.image-grid-1-row p {
+  display: grid;
+  grid-template-rows: repeat(2, 1fr);
+  grid-gap: 15px;
+}
+
 .remark-slide-number {
   display: none;
 }
