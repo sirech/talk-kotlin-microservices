@@ -13,7 +13,10 @@ class: impact
 ???
 
 - Some of us at TW are very excited about Kotlin
-- Want to share about our experience, mostly in the context of microservices
+- Went recently to a meetup in stuttgart about kotlin, had a look at the talks @ Kotlinconf
+- Mostly focused on android
+- Want to share about our experience using it as a backend language
+- We tend to work with microservices a lot, we want to focus on that
 
 ---
 
@@ -30,6 +33,10 @@ class: transition
 
 # Starting point
 
+???
+
+- want to focus first on my own journey with kotlin
+
 ---
 
 class: middle
@@ -38,7 +45,8 @@ class: middle
 
 ???
 
-- That's the beauty of microservices, experiments are possible
+- java has improved a lot, specially since java 8
+- still, 20 years of backwards compatibility
 
 ---
 
@@ -61,65 +69,19 @@ class: center middle
 class: full-width
 background-image: url(images/kotlin.png)
 
+???
+
+- surprise!
+
 ---
 
 class: transition
 
 # What do you get with Kotlin
 
----
-
-class: center middle 
-
-# Seamless transition
-
----
-
-class: center middle
-![springboot](images/springboot.png)
-
 ???
 
-- you don't need to change everything at once
-- kotlin makes a big point of remaning compatible with java
-
----
-
-class: center middle
-
-.image-grid[
-.img[![junit5](images/junit5.png)]
-.img[![wiremock](images/wiremock.png)]
-.img[![mockito](images/mockito.png)]
-.img[![assertj](images/assertj.png)]
-]
-
----
-
-```Dockerfile
-FROM openjdk:8-jre-alpine3.9
-
-WORKDIR /app
-EXPOSE 4003
-
-ENV ENV='dev'
-
-RUN apk add --update --no-cache dumb-init \
-  && rm -rf /var/cache/apk/*
-
-COPY build/libs/*.jar app.jar
-
-RUN adduser -D runner
-
-USER runner
-ENTRYPOINT ["/usr/bin/dumb-init", "--"]
-CMD ["java", "-Dspring.profiles.active=${ENV}", "-jar", "app.jar" ]
-```
-
-???
-
-- Operationally, there is little change.
-- If you are dockerizing your services, the only change is adding the right dependencies to the jar you build
+- we've yet to answer the first question: Why kotlin?
 
 ---
 
@@ -146,17 +108,9 @@ object CountryLanguageMatrix {
 }
 ```
 
----
+???
 
-class: middle
-
-```kotlin
-fun Country.isDefaultLanguage(language: Language): Boolean {
-    return CountryLanguageMatrix.locales[this]?.run {
-       this[0] == language
-    } ?: false
-}
-```
+- DSL capabilities
 
 ---
 
@@ -211,7 +165,7 @@ class: center middle
 class: middle
 
 ```kotlin
-class Stuff(val value: String)
+data class Stuff(val value: String)
 
 val safeToShare = listOf(
         Stuff("you"),
@@ -317,6 +271,71 @@ class: center middle
 - there is a lot more to talk about
 - json
 - testing
+
+---
+
+class: transition
+
+# How can I try it?
+
+???
+
+- all this might sound good, but you still have to convince your PO and your team to give it a try 
+
+---
+
+class: center middle 
+
+# Seamless transition
+
+---
+
+class: center middle
+![springboot](images/springboot.png)
+
+???
+
+- you don't need to change everything at once
+- kotlin makes a big point of remaning compatible with java
+
+---
+
+class: center middle
+
+.image-grid[
+.img[![junit5](images/junit5.png)]
+.img[![wiremock](images/wiremock.png)]
+.img[![mockito](images/mockito.png)]
+.img[![assertj](images/assertj.png)]
+]
+
+---
+
+```Dockerfile
+FROM openjdk:8-jre-alpine3.9
+
+WORKDIR /app
+EXPOSE 4003
+
+ENV ENV='dev'
+
+RUN apk add --update --no-cache dumb-init \
+  && rm -rf /var/cache/apk/*
+
+COPY build/libs/*.jar app.jar
+
+RUN adduser -D runner
+
+USER runner
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+CMD ["java", "-Dspring.profiles.active=${ENV}", "-jar", "app.jar" ]
+```
+
+???
+
+- Operationally, there is little change.
+- If you are dockerizing your services, the only change is adding the right dependencies to the jar you build
+- If you would transfer complexity from development to ops you would have gained little
 
 ---
 
