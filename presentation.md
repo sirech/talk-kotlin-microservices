@@ -133,6 +133,8 @@ class: center middle
 
 ---
 
+class: middle
+
 ```kotlin
 object CountryLanguageMatrix {
     val locales = mapOf(
@@ -142,7 +144,13 @@ object CountryLanguageMatrix {
             Country("cn") to listOf(Language("zh_CN"), Language("en_GB")),
     )
 }
+```
 
+---
+
+class: middle
+
+```kotlin
 fun Country.isDefaultLanguage(language: Language): Boolean {
     return CountryLanguageMatrix.locales[this]?.run {
        this[0] == language
@@ -151,6 +159,8 @@ fun Country.isDefaultLanguage(language: Language): Boolean {
 ```
 
 ---
+
+class: middle
 
 ```kotlin
 package my.utils
@@ -180,11 +190,63 @@ class: center middle
 
 ---
 
-immutability example
+class: center middle
+
+.img[![effective-java](images/effective-java.jpg)]
+
+
+???
+
+- for a long time, I've considered effective java THE book about programming
+- kotlin addresses many of the points
 
 ---
 
-closed classes & override
+class: center middle
+
+## Item 15: Minimise mutability
+
+---
+
+class: middle
+
+```kotlin
+class Stuff(val value: String)
+
+val safeToShare = listOf(
+        Stuff("you"),
+        Stuff("won't"),
+        Stuff("change"),
+        Stuff("this"))
+```
+
+???
+
+- Immutability works wonderfully with microservices, as it maps to the domain nicely
+
+---
+
+class: center middle
+
+## Item 17: Design and document for inheritance or else prohibit it
+
+---
+
+class: middle
+
+```kotlin
+class NotExtensible
+class BadIdea: NotExtensible() // Error !
+
+open class Extensible {
+    open fun say() = "hi"
+}
+
+class GoodIdea: Extensible() {
+    override fun say() = "hello"
+}
+
+```
 
 ---
 
@@ -194,11 +256,21 @@ class: center middle
 
 ---
 
+class: middle
+
+# The billion dollar mistake
+
+> I call it my billion-dollar mistake. It was the invention of the null reference in 1965. At that time, I was designing the first comprehensive type system for references in an object oriented language (ALGOL W). My goal was to ensure that all use of references should be absolutely safe, with checking performed automatically by the compiler. But I couldn't resist the temptation to put in a null reference, simply because it was so easy to implement. This has led to innumerable errors, vulnerabilities, and system crashes, which have probably caused a billion dollars of pain and damage in the last forty years.
+
+---
+
 class: center middle
 
 ## Pitfalls
 
 ---
+
+class: middle
 
 ```kotlin
 override fun preHandle(
@@ -214,11 +286,14 @@ override fun preHandle(
 
 ---
 
+class: middle
+
 ```kotlin
 override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
         filterChain: FilterChain) {
+
     request.getHeader(Headers.AUTHORIZATION)?.let { header ->
         jwt(header)?.let { jwt ->
             authentication(jwt)?.let { auth ->
@@ -233,9 +308,26 @@ override fun doFilterInternal(
 
 ---
 
+class: center middle
+
+# And much more
+
+???
+
+- there is a lot more to talk about
+- json
+- testing
+
+---
+
 class: transition
 
 # Kotlin is a gateway drug
+
+???
+
+- Incremental adoption and compatibility can get you hooked up
+- Over time, more and more kotlin specific stuff can be embraced
 
 ---
 
