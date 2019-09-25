@@ -12,7 +12,7 @@ class: impact
 
 ???
 
-- Some of us at TW are very excited about Kotlin
+- Some of us at TW are very excited about Kotlin and want to share our experience
 - Went recently to a meetup in stuttgart about kotlin, had a look at the talks @ Kotlinconf
 - Mostly focused on android
 - Want to share about our experience using it as a backend language
@@ -184,6 +184,12 @@ class: center middle
 
 ## Item 17: Design and document for inheritance or else prohibit it
 
+???
+
+- inheritance is easy to abuse
+- tightly coupled code that is hard to extract
+
+
 ---
 
 class: middle
@@ -201,6 +207,11 @@ class GoodIdea: Extensible() {
 }
 
 ```
+
+???
+
+- you can still use inheritance if you want, but by default things are closed
+- sane defaults require less explanation, less configuration
 
 ---
 
